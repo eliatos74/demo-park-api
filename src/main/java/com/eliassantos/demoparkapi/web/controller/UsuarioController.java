@@ -23,28 +23,28 @@ public class UsuarioController {
 
     @PostMapping
     public ResponseEntity<UsuarioResponseDTO> create (@RequestBody UsuarioCreateDTO request){
-        Usuario user = usuarioService.salvar(request);
-        var response = usuarioMapper.getResponseByIntity(user);
+        Usuario user = usuarioService.salvar(usuarioMapper.toUsuario(request));
+        var response = usuarioMapper.toDTO(user);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<UsuarioResponseDTO> getById (@PathVariable Long id){
         Usuario user = usuarioService.buscarPorId(id);
-        var response = usuarioMapper.getResponseByIntity(user);
+        var response = usuarioMapper.toDTO(user);
         return ResponseEntity.ok(response);
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<UsuarioResponseDTO> updatePassword (@PathVariable Long id, @RequestBody UsuarioSenhaDTO request){
+    public ResponseEntity<Void> updatePassword (@PathVariable Long id, @RequestBody UsuarioSenhaDTO request){
         Usuario user = usuarioService.editarSenha(id, request.senhaAtual(), request.novaSenha(), request.confirmarSenha());
-        var response = usuarioMapper.getResponseByIntity(user);
-        return ResponseEntity.ok(response);
+        return ResponseEntity.noContent().build();
     }
 
     @GetMapping
-    public ResponseEntity<List<Usuario>> getAll (){
+    public ResponseEntity<List<UsuarioResponseDTO>> getAll (){
         List<Usuario> users = usuarioService.buscarTodos();
-        return ResponseEntity.ok(users);
+        var response = usuarioMapper.toListDTO(users);
+        return ResponseEntity.ok(response);
     }
 }

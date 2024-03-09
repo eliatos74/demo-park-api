@@ -16,10 +16,10 @@ public class UsuarioService {
     private final UsuarioRepository usuarioRepository;
 
     @Transactional
-    public Usuario salvar(UsuarioCreateDTO request) {
-        Usuario user = new Usuario();
-        user.setUsername(request.username());
-        user.setPassword(request.password());
+    public Usuario salvar(Usuario user) {
+//        Usuario user = new Usuario();
+//        user.setUsername(request.username());
+//        user.setPassword(request.password());
         return usuarioRepository.save(user);
     }
 
