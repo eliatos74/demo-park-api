@@ -6,6 +6,7 @@ import com.eliassantos.demoparkapi.web.dto.UsuarioCreateDTO;
 import com.eliassantos.demoparkapi.web.dto.UsuarioResponseDTO;
 import com.eliassantos.demoparkapi.web.dto.UsuarioSenhaDTO;
 import com.eliassantos.demoparkapi.web.dto.mappers.UsuarioMapper;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +23,7 @@ public class UsuarioController {
     private final UsuarioMapper usuarioMapper;
 
     @PostMapping
-    public ResponseEntity<UsuarioResponseDTO> create (@RequestBody UsuarioCreateDTO request){
+    public ResponseEntity<UsuarioResponseDTO> create (@Valid @RequestBody UsuarioCreateDTO request){
         Usuario user = usuarioService.salvar(usuarioMapper.toUsuario(request));
         var response = usuarioMapper.toDTO(user);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
@@ -36,7 +37,7 @@ public class UsuarioController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<Void> updatePassword (@PathVariable Long id, @RequestBody UsuarioSenhaDTO request){
+    public ResponseEntity<Void> updatePassword (@PathVariable Long id, @Valid @RequestBody UsuarioSenhaDTO request){
         Usuario user = usuarioService.editarSenha(id, request.senhaAtual(), request.novaSenha(), request.confirmarSenha());
         return ResponseEntity.noContent().build();
     }
